@@ -1,57 +1,29 @@
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
         Elevador elevador = new Elevador(0, 5);
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Controle do elevador");
-        System.out.printf(
-                "Andares disponiveis: %d a %d%n",
-                elevador.getAndarMinimo(),
-                elevador.getAndarMaximo()
-        );
         exibirEstado("Estado inicial", elevador);
 
-        while (true) {
-            System.out.println();
-            System.out.println("Comandos: subir, descer, abrir, fechar, status, sair");
-            System.out.print("Digite um comando: ");
+        executarAcao("Abrir porta", elevador.abrirPorta(), elevador);
+        executarAcao("Subir com a porta aberta", elevador.subir(), elevador);
+        executarAcao("Fechar porta", elevador.fecharPorta(), elevador);
+        executarAcao("Subir", elevador.subir(), elevador);
+        executarAcao("Subir", elevador.subir(), elevador);
+        executarAcao("Descer", elevador.descer(), elevador);
+        executarAcao("Abrir porta", elevador.abrirPorta(), elevador);
+        executarAcao("Descer com a porta aberta", elevador.descer(), elevador);
+        executarAcao("Fechar porta", elevador.fecharPorta(), elevador);
 
-            String comando = scanner.nextLine().trim().toLowerCase();
-
-            if (comando.equals("sair")) {
-                System.out.println("Programa encerrado.");
-                break;
-            }
-
-            switch (comando) {
-                case "subir":
-                    System.out.println(elevador.subir() ? "Elevador subiu um andar." : "Nao foi possivel subir.");
-                    exibirEstado("Estado atual", elevador);
-                    break;
-                case "descer":
-                    System.out.println(elevador.descer() ? "Elevador desceu um andar." : "Nao foi possivel descer.");
-                    exibirEstado("Estado atual", elevador);
-                    break;
-                case "abrir":
-                    System.out.println(elevador.abrirPorta() ? "Porta aberta." : "A porta ja esta aberta.");
-                    exibirEstado("Estado atual", elevador);
-                    break;
-                case "fechar":
-                    System.out.println(elevador.fecharPorta() ? "Porta fechada." : "A porta ja esta fechada.");
-                    exibirEstado("Estado atual", elevador);
-                    break;
-                case "status":
-                    exibirEstado("Estado atual", elevador);
-                    break;
-                default:
-                    System.out.println("Comando invalido. Tente novamente.");
-                    break;
-            }
+        while (elevador.subir()) {
+            exibirEstado("Subindo ate o ultimo andar", elevador);
         }
 
-        scanner.close();
+        executarAcao("Tentar subir acima do ultimo andar", elevador.subir(), elevador);
+    }
+
+    private static void executarAcao(String acao, boolean sucesso, Elevador elevador) {
+        System.out.printf("%s: %s%n", acao, sucesso ? "sucesso" : "acao nao permitida");
+        exibirEstado("Estado atual", elevador);
     }
 
     private static void exibirEstado(String titulo, Elevador elevador) {
